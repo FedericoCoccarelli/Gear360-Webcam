@@ -198,12 +198,27 @@ def main():
         sys.exit(1)
 
     # Step 6: read video
+    actual_width = config.get("cam_width", 1920)
+    actual_height = config.get("cam_height", 1080)
+    try:
+        res_resp = cctrl_send(ep_out, ep_in_cctrl, "CCTRL GET STATUS RESOLUTION")
+        print(f"[CCTRL] Camera active resolution: {res_resp}")
+        if res_resp:
+            res_str = res_resp.split()[-1]
+            if "x" in res_str:
+                parts = res_str.split("x")
+                actual_width = int(parts[0])
+                actual_height = int(parts[1])
+                print(f"[CCTRL] Dynamic resolution detection: {actual_width}x{actual_height}")
+    except Exception as e:
+        print(f"[CCTRL] Warning: could not query active resolution, using config defaults: {e}")
+
     try:
         pipe_to_opencv(
             ep_in_video, 
             fps=config.get("fps", 30), 
-            cam_width=config.get("cam_width", 1920), 
-            cam_height=config.get("cam_height", 1080),
+            cam_width=actual_width, 
+            cam_height=actual_height,
             brightness=config.get("brightness", 0),
             contrast=config.get("contrast", 1.0),
             show_preview=config.get("preview", True),

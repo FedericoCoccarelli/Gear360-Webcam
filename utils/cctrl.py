@@ -28,14 +28,14 @@ def cctrl_sequence(ep_out, ep_in, lens_mode=1, stream_quality_profile=51):
     """Sends the essential CCTRL configuration commands to start the stream."""
     flush_endpoint(ep_in)
     cmds = [
-        f"CCTRL SET STATUS STREAM QUALITY PROFILE {stream_quality_profile}",
         f"CCTRL SET STATUS LENS MODE {lens_mode}",
+        f"CCTRL SET STATUS STREAM QUALITY PROFILE {stream_quality_profile}",
     ]
     for cmd in cmds:
         try:
             resp = cctrl_send(ep_out, ep_in, cmd)
             resp_safe = resp[:80].encode(sys.stdout.encoding or 'ascii', errors='replace').decode(sys.stdout.encoding or 'ascii')
-            print(f"  [{cmd[:40]}] -> {resp_safe}")
+            print(f"  [{cmd}] -> {resp_safe}")
         except Exception as e:
-            print(f"  [{cmd[:40]}] ERROR: {e}")
+            print(f"  [{cmd}] ERROR: {e}")
         time.sleep(0.05)
