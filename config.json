@@ -1,0 +1,63 @@
+{
+  "preview": false,
+  "virtual_camera": true,
+  "stream_quality_profile": "51-1",
+  "brightness": 0,
+  "contrast": 1.0,
+  "profiles": {
+    "0": {
+      "cam_width": 2560,
+      "cam_height": 1280,
+      "fps": 15,
+      "lens_mode": 0
+    },
+    "1": {
+      "cam_width": 1920,
+      "cam_height": 960,
+      "fps": 30,
+      "lens_mode": 0
+    },
+    "2": {
+      "cam_width": 1920,
+      "cam_height": 960,
+      "fps": 15,
+      "lens_mode": 0
+    },
+    "50-1": {
+      "cam_width": 1920,
+      "cam_height": 1080,
+      "fps": 60,
+      "lens_mode": 1
+    },
+    "50-2": {
+      "cam_width": 1920,
+      "cam_height": 1080,
+      "fps": 60,
+      "lens_mode": 2
+    },
+    "51-1": {
+      "cam_width": 1920,
+      "cam_height": 1080,
+      "fps": 30,
+      "lens_mode": 1
+    },
+    "51-2": {
+      "cam_width": 1920,
+      "cam_height": 1080,
+      "fps": 30,
+      "lens_mode": 2
+    },
+    "52-1": {
+      "cam_width": 1280,
+      "cam_height": 720,
+      "fps": 30,
+      "lens_mode": 1
+    },
+    "52-2": {
+      "cam_width": 1280,
+      "cam_height": 720,
+      "fps": 30,
+      "lens_mode": 2
+    }
+  }
+}
