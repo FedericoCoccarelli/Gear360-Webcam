@@ -18,7 +18,12 @@ You need to replace the default Samsung USB drivers with generic WinUSB drivers 
 To use the Gear 360 as a system-wide webcam, install the standalone OBS Virtual Camera driver:
 - Download and run the lightweight driver installer from [GitHub OBS Virtual Camera Releases](https://github.com/miaulightouch/obs-virtual-cam/releases).
 
-### 3. Python Dependencies
+### 3. FFmpeg
+FFmpeg is required to decode the camera's H.265 video stream:
+1. Download the FFmpeg release build for Windows from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
+2. Extract the downloaded folder and add the `bin` directory (which contains `ffmpeg.exe`) to your system's environment variables `Path`.
+
+### 4. Python Dependencies
 Install the required python libraries using:
 ```bash
 pip install -r requirements.txt
