@@ -38,12 +38,12 @@ pip install -r requirements.txt
    - `"stream_quality_profile"`: Choose the profile ID. For single lens modes, use hyphenated naming to specify which lens to stream (e.g., `"51-1"` for front lens, `"51-2"` for rear lens). See `gear360_profiles.md` for a full list.
    - `"ffmpeg_post_processing"`: Configuration for real-time video adjustment using FFmpeg filters.
      - `"enabled"`: Enable/disable all FFmpeg filters (`true` or `false`).
-     - `"saturation"`: Color saturation multiplier. Range: `0.0` (grayscale) to `3.0`. Default: `1.2`.
-     - `"unsharp_msize"`: Size of the sharpening matrix (must be an odd integer). Range: `3` to `23`. Default: `3`.
-     - `"unsharp_amount"`: Strength of the sharpening/blurring effect. Range: `-2.0` (blur) to `5.0` (sharpen). Default: `0.5`.
+     - `"saturation"`: Color saturation multiplier. Range: `0.0` (grayscale) to `3.0`.
+     - `"unsharp_msize"`: Size of the sharpening matrix (must be an odd integer). Range: `3` to `23`.
+     - `"unsharp_amount"`: Strength of the sharpening/blurring effect. Range: `-2.0` (blur) to `5.0` (sharpen).
      - `"gamma"`: Mid-tone brightness correction. Range: `0.1` to `10.0`. Default: `1.0`.
-     - `"hue"`: Hue rotation in degrees. Range: `-180.0` to `180.0`. Default: `0.0`.
-     - `"denoise"`: Enable or disable the `atadenoise` noise reduction filter (`true` or `false`). Default: `false`.
+     - `"hue"`: Hue rotation in degrees. Range: `-180.0` to `180.0`.
+     - `"denoise"`: Enable or disable the `atadenoise` noise reduction filter (`true` or `false`).
 
 2. Run the Streamer:
    Double-click `run_webcam.bat` or run:
