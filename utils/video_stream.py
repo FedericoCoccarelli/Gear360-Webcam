@@ -5,6 +5,9 @@ import time
 import queue
 import av
 
+# Keys that close the preview window (q or ESC)
+_QUIT_KEYS = {ord('q'), 27}
+
 def unwrap_stream(ep_in_video):
     """Generator that reads from the USB endpoint, parses it, and
        yields only the HEVC payloads of '00VD' chunks on the fly.
@@ -123,25 +126,22 @@ def pipe_to_opencv(ep_in_video, fps=30, cam_width=1920, cam_height=960,
         print("         pip install opencv-python numpy")
         return
 
-    # --- Output resolution (16:9 crop) ---
+    # --- Output resolution and crop slice (computed once, reused per frame) ---
     target_aspect  = 16.0 / 9.0
     current_aspect = cam_width / cam_height
+
     if current_aspect > target_aspect:
+        # Wider than 16:9 — crop left/right
         out_height = cam_height
         out_width  = int(cam_height * target_aspect)
+        offset     = (cam_width - out_width) // 2
+        crop_sl    = (slice(None), slice(offset, offset + out_width))
     else:
+        # Taller than 16:9 — crop top/bottom
         out_width  = cam_width
         out_height = int(cam_width / target_aspect)
-
-    # --- Pre-compute crop slice (avoid per-frame if/else) ---
-    if current_aspect > target_aspect:
-        new_w   = int(cam_height * target_aspect)
-        offset  = (cam_width - new_w) // 2
-        crop_sl = (slice(None), slice(offset, offset + new_w))
-    else:
-        new_h   = int(cam_width / target_aspect)
-        offset  = (cam_height - new_h) // 2
-        crop_sl = (slice(offset, offset + new_h), slice(None))
+        offset     = (cam_height - out_height) // 2
+        crop_sl    = (slice(offset, offset + out_height), slice(None))
 
     # --- Virtual webcam ---
     vcam = None
@@ -279,7 +279,7 @@ def pipe_to_opencv(ep_in_video, fps=30, cam_width=1920, cam_height=960,
                 if not decode_thread.is_alive() and not pp_thread.is_alive():
                     break
                 if show_preview:
-                    if cv2.waitKey(1) & 0xFF in (ord('q'), 27):
+                    if cv2.waitKey(1) & 0xFF in _QUIT_KEYS:
                         break
                 continue
 
@@ -288,8 +288,7 @@ def pipe_to_opencv(ep_in_video, fps=30, cam_width=1920, cam_height=960,
 
             if show_preview:
                 cv2.imshow("Gear 360 Live Preview", frame)
-                key = cv2.waitKey(1) & 0xFF
-                if key == ord('q') or key == 27:
+                if cv2.waitKey(1) & 0xFF in _QUIT_KEYS:
                     break
             else:
                 time.sleep(0.001)
