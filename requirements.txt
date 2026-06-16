@@ -3,3 +3,4 @@ libusb-package
 opencv-python
 numpy
 pyvirtualcam
+av

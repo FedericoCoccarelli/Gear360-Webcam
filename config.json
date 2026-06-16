@@ -1,9 +1,18 @@
 {
-  "preview": false,
+  "preview": true,
   "virtual_camera": true,
-  "stream_quality_profile": "51-1",
+  "stream_quality_profile": "52-1",
   "brightness": 0,
   "contrast": 1.0,
+  "post_processing": {
+    "enabled": true,
+    "saturation": 1,
+    "unsharp_msize": 3,
+    "unsharp_amount": 2,
+    "gamma": 1.0,
+    "hue": 0.0,
+    "denoise": true
+  },
   "profiles": {
     "0": {
       "cam_width": 2560,

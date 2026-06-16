@@ -18,10 +18,8 @@ You need to replace the default Samsung USB drivers with generic WinUSB drivers 
 To use the Gear 360 as a system-wide webcam, install the standalone OBS Virtual Camera driver:
 - Download and run the lightweight driver installer from [GitHub OBS Virtual Camera Releases](https://github.com/miaulightouch/obs-virtual-cam/releases).
 
-### 3. FFmpeg
-FFmpeg is required to decode the camera's H.265 video stream:
-1. Download the FFmpeg release build for Windows from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
-2. Extract the downloaded folder and add the `bin` directory (which contains `ffmpeg.exe`) to your system's environment variables `Path`.
+### 3. PyAV (FFmpeg bindings)
+This project uses PyAV (`av`) to decode the camera's H.265 video stream and apply filters in-process. System-wide installation of FFmpeg is **not** required, as `av` comes with its own precompiled FFmpeg binaries.
 
 ### 4. Python Dependencies
 Install the required python libraries using:
@@ -38,6 +36,14 @@ pip install -r requirements.txt
    - `"preview"`: Set `true` to show a local preview window, or `false` to run headlessly in the background.
    - `"virtual_camera"`: Set `true` to feed the stream into the Windows virtual webcam.
    - `"stream_quality_profile"`: Choose the profile ID. For single lens modes, use hyphenated naming to specify which lens to stream (e.g., `"51-1"` for front lens, `"51-2"` for rear lens). See `gear360_profiles.md` for a full list.
+   - `"ffmpeg_post_processing"`: Configuration for real-time video adjustment using FFmpeg filters.
+     - `"enabled"`: Enable/disable all FFmpeg filters (`true` or `false`).
+     - `"saturation"`: Color saturation multiplier. Range: `0.0` (grayscale) to `3.0`. Default: `1.2`.
+     - `"unsharp_msize"`: Size of the sharpening matrix (must be an odd integer). Range: `3` to `23`. Default: `3`.
+     - `"unsharp_amount"`: Strength of the sharpening/blurring effect. Range: `-2.0` (blur) to `5.0` (sharpen). Default: `0.5`.
+     - `"gamma"`: Mid-tone brightness correction. Range: `0.1` to `10.0`. Default: `1.0`.
+     - `"hue"`: Hue rotation in degrees. Range: `-180.0` to `180.0`. Default: `0.0`.
+     - `"denoise"`: Enable or disable the `atadenoise` noise reduction filter (`true` or `false`). Default: `false`.
 
 2. Run the Streamer:
    Double-click `run_webcam.bat` or run:

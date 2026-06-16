@@ -45,23 +45,6 @@ def open_interfaces(dev):
 
     return ep_out, ep_in_cctrl, ep_in_video
 
-def resolve_ffmpeg():
-    # If ffmpeg is already in PATH, do nothing
-    import shutil
-    if shutil.which("ffmpeg"):
-        return
-    # Check HKCU\Environment registry to load fresh PATH
-    try:
-        import winreg
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment", 0, winreg.KEY_READ) as key:
-            val, _ = winreg.QueryValueEx(key, "PATH")
-            for p in val.split(';'):
-                if 'ffmpeg' in p.lower() and os.path.isdir(p):
-                    os.environ['PATH'] = p + ';' + os.environ['PATH']
-                    print(f"[INFO] FFmpeg dynamically loaded from: {p}")
-                    return
-    except Exception:
-        pass
 
 def load_config():
     if getattr(sys, 'frozen', False):
@@ -76,7 +59,16 @@ def load_config():
         "virtual_camera": True,
         "stream_quality_profile": 51,
         "brightness": 0,
-        "contrast": 1.0
+        "contrast": 1.0,
+        "post_processing": {
+            "enabled": True,
+            "saturation": 1.2,
+            "unsharp_msize": 3,
+            "unsharp_amount": 0.5,
+            "gamma": 1.0,
+            "hue": 0.0,
+            "denoise": False
+        }
     }
     
     user_config = {}
@@ -130,14 +122,25 @@ def load_config():
                     "52-1": {"cam_width": 1280, "cam_height": 720, "fps": 30, "lens_mode": 1},
                     "52-2": {"cam_width": 1280, "cam_height": 720, "fps": 30, "lens_mode": 2}
                 }
+
                 user_defaults = {
                     "preview": True,
                     "virtual_camera": True,
                     "stream_quality_profile": 51,
                     "brightness": 0,
                     "contrast": 1.0,
+                    "post_processing": {
+                        "enabled": True,
+                        "saturation": 1.2,
+                        "unsharp_msize": 3,
+                        "unsharp_amount": 0.5,
+                        "gamma": 1.0,
+                        "hue": 0.0,
+                        "denoise": False
+                    },
                     "profiles": default_profiles
                 }
+
                 json.dump(user_defaults, f, indent=4)
             print(f"[CONFIG] Created default configuration file: {config_path}")
         except Exception as e:
@@ -146,7 +149,6 @@ def load_config():
     return config
 
 def main():
-    resolve_ffmpeg()
     config = load_config()
 
     # Step 1: switch mode via MTP (always triggered)
@@ -222,7 +224,8 @@ def main():
             brightness=config.get("brightness", 0),
             contrast=config.get("contrast", 1.0),
             show_preview=config.get("preview", True),
-            use_virtual_cam=config.get("virtual_camera", True)
+            use_virtual_cam=config.get("virtual_camera", True),
+            post_processing=config.get("post_processing", {})
         )
     except KeyboardInterrupt:
         print("\n[INFO] Interrupted by user")
