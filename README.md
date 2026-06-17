@@ -1,4 +1,4 @@
-# Gear 360 (SM-R210) USB Streamer & Virtual Webcam
+# Gear 360 (SM-R210) as USB Webcam
 
 A modular Python tool to stream live video from the Samsung Gear 360 (SM-R210) over USB, apply real-time cropping to a 16:9 aspect ratio matching the active profile's target resolution, and stream it to a virtual webcam (e.g. OBS Virtual Camera or pyvirtualcam) under Windows.
 
